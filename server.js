@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
+const methodOverride = require('method-override')
 
 const app = express()
 
@@ -9,6 +10,7 @@ require('./config/database')
 
 const Fruit = require('./models/fruit')
 app.use(express.urlencoded({ extended: false }))
+app.use(methodOverride('_method'))
 
 // MIDDLEWARE
 app.use(morgan('dev'))
@@ -42,6 +44,11 @@ app.post('/fruits', async (req, res) => {
     : (req.body.isReadyToEat = false)
   console.log(req.body)
   await Fruit.create(req.body)
+  res.redirect('/fruits')
+})
+
+app.delete('/fruits/:fruitId', async (req, res) => {
+  await Fruit.findByIdAndDelete(req.params.fruitId)
   res.redirect('/fruits')
 })
 
