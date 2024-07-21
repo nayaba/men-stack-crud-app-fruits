@@ -18,6 +18,13 @@ app.get("/", async (req, res) => {
   res.render("index.ejs")
 })
 
+app.get('/fruits', async (req, res) => {
+    const allFruit = await Fruit.find({})
+    res.render('fruits/index.ejs', {
+        fruits: allFruit
+    })
+})
+
 app.get("/fruits/new", (req, res) => {
   res.render("fruits/new.ejs")
 })
@@ -28,7 +35,7 @@ app.post("/fruits", async (req, res) => {
     : (req.body.isReadyToEat = false)
   console.log(req.body)
   await Fruit.create(req.body)
-  res.redirect("/fruits/new")
+  res.redirect("/fruits")
 })
 
 app.listen(3000, () => {
